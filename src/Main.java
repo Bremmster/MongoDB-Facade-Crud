@@ -3,6 +3,6 @@
  */
 public class Main {
     public static void main(String[] args) {
-        Employee emp1 = new Employee();
+        System.out.println("Hello World!");
     }
 }
