@@ -25,6 +25,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="mongodb.mongo.java.driver" level="project" />
+    <orderEntry type="library" name="mongodb.driver.sync" level="project" />
   </component>
 </module>
