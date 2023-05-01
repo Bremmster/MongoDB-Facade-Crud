@@ -2,10 +2,10 @@
  * @author Kristian Karlson
  */
 public class Customer extends Person{
-    private int customerNo;
+    private String customerNo;
 
-    public Customer(String name, int age, String[] address, int zipcode, String city, int customerNo) {
-        super(name, age, address, zipcode, city);
+    public Customer(String name, int age, String[] address, String customerNo) {
+        super(name, age, address);
         this.customerNo = customerNo;
     }
 }

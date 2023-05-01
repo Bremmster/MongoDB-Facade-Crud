@@ -13,21 +13,17 @@ public class Person {
     private String[] address;
     private int zipcode;
     private String city;
-    public Person(String dbId, String name, int age, String[] address, int zipcode, String city) {
+    public Person(String dbId, String name, int age, String[] address) {
         this.dbId = dbId;
         this.name = name;
         this.age = age;
         this.address = address;
-        this.zipcode = zipcode;
-        this.city = city;
     }
 
-    public Person(String name, int age, String[] address, int zipcode, String city) {
+    public Person(String name, int age, String[] address) {
         this.name = name;
         this.age = age;
         this.address = address;
-        this.zipcode = zipcode;
-        this.city = city;
     }
 
     @Override
@@ -40,8 +36,8 @@ public class Person {
                ", name='" + name + '\'' +
                ", age=" + age +
                ", address=" + Arrays.toString(address) +
-               ", zipcode=" + zipcode +
-               ", city='" + city + '\'' +
+
+               '\'' +
                '}';
     }
 }
