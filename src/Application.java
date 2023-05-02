@@ -3,7 +3,7 @@
  */
 public class Application {
 
-    public void mainMenu() {
+/*    public void mainMenu() {
         // Switch with main menu
         while (true) {
             switch (UsrInput.Int()) {
@@ -18,7 +18,7 @@ public class Application {
                 }
             }
         }
-    }
+    } */
 
     private void addPerson() {
         Text.addPerson();
