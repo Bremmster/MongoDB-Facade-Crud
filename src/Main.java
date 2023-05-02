@@ -11,7 +11,7 @@ public class Main {
         System.out.println(keyReader.getKey("usrName"));
 
 //        DbFacade db = new DbFacade();
-        DbFacade.connect(keyReader);
+
 
 
 
