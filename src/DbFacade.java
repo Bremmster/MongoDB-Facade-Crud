@@ -10,6 +10,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.IndexOptions;
 import org.bson.Document;
 
 
@@ -21,18 +22,22 @@ public class DbFacade {
     private MongoCollection<Document> collection;
     private String connString;
     private String dbName;
-    public DbFacade(String connString, String dbName, String collectionName) {
-        this.connString = connString;
+
+    public DbFacade(KeyReader key, String dbName, String collectionName) {
+        this.connString = "mongodb+srv://" + key.getKey("usrName") + ":" + key.getKey("apiKey") + "@cluster0.lb6kqnd.mongodb.net/?retryWrites=true&w=majority";
         this.dbName = dbName;
         this.collectionName = collectionName;
+        connect();
+    }
+    public DbFacade(KeyReader key) {
+        this.connString = "mongodb+srv://" + key.getKey("usrName") + ":" + key.getKey("apiKey") + "@cluster0.lb6kqnd.mongodb.net/?retryWrites=true&w=majority";
+        this.dbName = "Person";
+        this.collectionName = "public_person";
+        connect();
     }
 
     public void connect() {
 
-        // Replace the placeholder with your Atlas connection string
-        // String uri = "mongodb+srv://" + key.getKey("usrName") + ":" + key.getKey("apiKey") + "@cluster0.lb6kqnd.mongodb.net/?retryWrites=true&w=majority";
-
-        // Construct a ServerApi instance using the ServerApi.builder() method
         ServerApi serverApi = ServerApi.builder()
                 .version(ServerApiVersion.V1)
                 .build();
@@ -42,15 +47,21 @@ public class DbFacade {
                 .serverApi(serverApi)
                 .build();
 
-
-        this.mongoClient = MongoClients.create(settings);
-        this.db = mongoClient.getDatabase(this.dbName);
-        System.out.println("You successfully connected to MongoDB!");
-        this.collection = db.getCollection(collectionName);
+        try {
+            this.mongoClient = MongoClients.create(settings);
+            this.db = mongoClient.getDatabase(this.dbName);
+            System.out.println("You successfully connected to MongoDB!");
+            this.collection = db.getCollection(collectionName);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
+    public void createIndex() {
+        collection.createIndex(new Document("name", 1), new IndexOptions().unique(false));
+    }
 
-    public void insertOne() {
+    public void insertOne(Person person) {
 
     }
 
