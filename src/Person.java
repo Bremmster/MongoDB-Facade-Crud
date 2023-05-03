@@ -1,4 +1,5 @@
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 /**
  * @author Kristian Karlson
@@ -7,14 +8,14 @@ public class Person {
 
     // Skapa en Java-modell för "Person" med följande egenskaper: "namn", "ålder" och "adress".
 
-    private String _id;
-    private String name;
-    private int age;
-    private String address;
-    private int zipcode;
-    private String city;
+    protected ObjectId _id;
+    protected String name;
+    protected int age;
+    protected String address;
+    protected int zipcode;
+    protected String city;
 
-    public Person(String _id, String name, int age, String address, int zipcode, String city) {
+    public Person(ObjectId _id, String name, int age, String address, int zipcode, String city) {
         this._id = _id;
         this.name = name;
         this.age = age;
@@ -39,23 +40,46 @@ public class Person {
             return new Person();
         }
         return new Person(
+                document.getObjectId("_id"),
                 document.getString("name"),
                 document.getInteger("age"),
-                document.getString("streetaddress"),
+                document.getString("address"),
                 document.getInteger("zipcode"),
                 document.getString("city"));
 
     }
 
-    @Override
-    public String toString() {
-        return super.toString();
+    public static Person fromJson(String json) {
+        Document doc = org.bson.Document.parse(json);
+        return fromDoc(doc);
+    }
+
+    public Document toDoc() {
+        return new Document("name", name)
+                .append("age", age)
+                .append("address", address)
+                .append("zipcode", zipcode)
+                .append("city", city)
+                .append("_id", _id);
+    }
+
+    public String toJson() {
+        return toDoc().toJson();
     }
 
     // todo print employee no or customer id
-        // should it be solved here oc in respective class?
-        // (Person instanceof Employee) ? "" : "";
+    // should it be solved here oc in respective class?
+    // (Person instanceof Employee) ? "" : "";
 
 
-
+    @Override
+    public String toString() {
+        return "{_id='" + _id + '\'' +
+               ", name='" + name + '\'' +
+               ", age=" + age +
+               ", address='" + address + '\'' +
+               ", zipcode=" + zipcode +
+               ", city='" + city + '\'' +
+               '}';
+    }
 }

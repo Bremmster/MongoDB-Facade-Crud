@@ -19,7 +19,7 @@ public class Application {
             }
         }
     } */
-
+/* todo ngl delete or adapt this
     private void addPerson() {
         Text.addPerson();
         // "String name, int age, Sting street adress, String house number, int zipcode, String city, String employee number || Customer number"
@@ -46,5 +46,5 @@ public class Application {
             }
         }
         // todo send object to DB
-    }
+    }*/
 }

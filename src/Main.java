@@ -1,16 +1,35 @@
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * @author Kristian Karlson
  */
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        System.out.println("Hello MongoDB!");
+
+        Logger.getLogger("org.mongodb.driver")
+                .setLevel(Level.SEVERE);
+
+        DbFacade db = new DbFacade(new KeyReader("api.key"));
+
+        Person person = new Person("Kalle Anka", 32, "Blomstergatan 24", 31313, "Ankeborg");
+        db.insertOne(person);
+
+        Customer customer = new Customer("Larry", 24, "Road 1", 54312, "soCal", "234");
+        db.insertOne(customer);
+
+        Employee employee = new Employee("Barry", 42, "Outback 1", 2324, "Texas", "1");
+
+        db.insertOne(employee);
+
+        System.out.println(db.find("Kalle Anka"));
 
         // todo remove or move code
-        KeyReader keyReader = new KeyReader("api.key");
-        System.out.println(keyReader.getKey("apiKey"));
-        System.out.println(keyReader.getKey("usrName"));
+//        KeyReader keyReader = new KeyReader("api.key");
+//        System.out.println(keyReader.getKey("apiKey"));
+//        System.out.println(keyReader.getKey("usrName"));
 
-//        DbFacade db = new DbFacade();
 
 
 

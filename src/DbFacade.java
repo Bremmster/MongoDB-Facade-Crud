@@ -6,12 +6,12 @@ import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.ServerApi;
 import com.mongodb.ServerApiVersion;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.*;
 import com.mongodb.client.model.IndexOptions;
 import org.bson.Document;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DbFacade {
@@ -63,6 +63,31 @@ public class DbFacade {
 
     public void insertOne(Person person) {
 
+        Document doc = person.toDoc();
+        doc.remove("_id");
+        var find = collection.find(doc);
+        if (find.first() == null) collection.insertOne(doc);
+    }
+
+    public Person findById(String id) {
+        Document doc = new Document("id", id);
+        Document search = collection.find(doc).first();
+        return Person.fromDoc(search);
+    }
+    public void delete(String id) {
+        Document doc = new Document("id", id);
+        collection.deleteOne(doc);
+    }
+
+    public List<Person> find(String name) {
+        Document doc = new Document("name", name);
+        FindIterable<Document> result = collection.find(doc);
+
+        ArrayList<Person> people = new ArrayList<>();
+
+        result.forEach(person -> people.add(Person.fromDoc(person)));
+
+        return people;
     }
 
     public void close() {
