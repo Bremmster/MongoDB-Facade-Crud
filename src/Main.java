@@ -24,6 +24,8 @@ public class Main {
         db.insertOne(employee);
 
         System.out.println(db.find("Kalle Anka"));
+        System.out.println(db.find("Larry"));
+        System.out.println(db.find("Barry"));
 
         // todo remove or move code
 //        KeyReader keyReader = new KeyReader("api.key");

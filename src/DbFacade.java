@@ -72,6 +72,7 @@ public class DbFacade {
     public Person findById(String id) {
         Document doc = new Document("id", id);
         Document search = collection.find(doc).first();
+
         return Person.fromDoc(search);
     }
     public void delete(String id) {
@@ -80,8 +81,8 @@ public class DbFacade {
     }
 
     public List<Person> find(String name) {
-        Document doc = new Document("name", name);
-        FindIterable<Document> result = collection.find(doc);
+        Document query = new Document("name", name);
+        MongoCursor<Document> cursor = collection.find(query).iterator();
 
         ArrayList<Person> people = new ArrayList<>();
 

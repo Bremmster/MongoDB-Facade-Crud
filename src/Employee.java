@@ -25,13 +25,13 @@ public class Employee extends Person {
                 .append("zipcode", zipcode)
                 .append("city", city)
                 .append("employeeNo", employeeNo)
-                .append("_id", _id);
+                .append("_id", dbId);
     }
 
     @Override
     public String toString() {
         return "employeeNo='" + employeeNo + '\'' +
-               ", _id='" + _id + '\'' +
+               ", _id='" + dbId + '\'' +
                ", name='" + name + '\'' +
                ", age=" + age +
                ", address='" + address + '\'' +

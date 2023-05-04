@@ -1,4 +1,5 @@
 import org.bson.Document;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 
 /**
@@ -8,15 +9,16 @@ public class Person {
 
     // Skapa en Java-modell för "Person" med följande egenskaper: "namn", "ålder" och "adress".
 
-    protected ObjectId _id;
+    @BsonProperty(value = "_id")
+    protected ObjectId dbId;
     protected String name;
     protected int age;
     protected String address;
     protected int zipcode;
     protected String city;
 
-    public Person(ObjectId _id, String name, int age, String address, int zipcode, String city) {
-        this._id = _id;
+    public Person(ObjectId dbId, String name, int age, String address, int zipcode, String city) {
+        this.dbId = dbId;
         this.name = name;
         this.age = age;
         this.address = address;
@@ -60,7 +62,7 @@ public class Person {
                 .append("address", address)
                 .append("zipcode", zipcode)
                 .append("city", city)
-                .append("_id", _id);
+                .append("_id", dbId);
     }
 
     public String toJson() {
@@ -72,7 +74,7 @@ public class Person {
     // (Person instanceof Employee) ? "" : "";
 
 
-    @Override
+    /*@Override
     public String toString() {
         return "{_id='" + _id + '\'' +
                ", name='" + name + '\'' +
@@ -81,5 +83,5 @@ public class Person {
                ", zipcode=" + zipcode +
                ", city='" + city + '\'' +
                '}';
-    }
+    }*/
 }

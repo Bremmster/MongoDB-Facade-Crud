@@ -7,8 +7,8 @@ import org.bson.types.ObjectId;
 public class Customer extends Person{
     private String customerNo;
 
-    public Customer(ObjectId _id, String name, int age, String address, int zipcode, String city, String customerNo) {
-        super(_id, name, age, address, zipcode, city);
+    public Customer(ObjectId dbId, String name, int age, String address, int zipcode, String city, String customerNo) {
+        super(dbId, name, age, address, zipcode, city);
         this.customerNo = customerNo;
     }
 
@@ -23,13 +23,13 @@ public class Customer extends Person{
                 .append("zipcode", zipcode)
                 .append("city", city)
                 .append("customerNo", customerNo)
-                .append("_id", _id);
+                .append("_id", dbId);
     }
 
     @Override
     public String toString() {
-        return "customerNo='" + customerNo + '\'' +
-               ", _id='" + _id + '\'' +
+        return ",customerNo='" + customerNo + '\'' +
+               ", _id='" + dbId + '\'' +
                ", name='" + name + '\'' +
                ", age=" + age +
                ", address='" + address + '\'' +
