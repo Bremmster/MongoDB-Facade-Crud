@@ -24,26 +24,46 @@ public class Main {
 
         updatePerson(db);
 
-        System.out.println("Delete Kalle Anka uses Search by _id");
+        getAllPersons(db);
+
+        deletePerson(db);
+
+        /*System.out.println("Delete Kalle Anka uses Search by _id");
 
         System.out.println(kalleAnka.getDbId()); // removes kalle anka from database
         System.out.println(customer.getDbId());
-        System.out.println(employee.getDbId());
+        System.out.println(employee.getDbId()); */
 
         db.close(); // close the database
 
     }
 
+    private static void deletePerson(DbFacade db) {
+        System.out.println("Delete Joakim von Anka");
+        var person = db.findName("Joakim von Anka");
+        db.delete(person.getDbId());
+    }
+
+    private static void getAllPersons(DbFacade db) {
+        System.out.println("List of all persons in database");
+        List<Person> persons = db.findAll();
+        for (Person person : persons) {
+            System.out.println(person);
+        }
+    }
+
     private static void updatePerson(DbFacade db) {
-        var update = db.findName("Kalle Anka").;
-        update
+        System.out.println("update Kalle Anka to Joakim von Anka");
+        var person = db.findName("Kalle Anka");
+        db.update(String.valueOf(person.getDbId()), "Joakim von Anka", 67, "Pengabingen 1", 12345, "Ankeborg");
+
     }
 
     private static void searchByField(DbFacade db) {
         System.out.println("Search for Customers: ");
         List<Person> customers = db.findType("customerNo");
-        for (Person cust : customers) {
-            System.out.println(cust);
+        for (Person person : customers) {
+            System.out.println(person);
         }
     }
 

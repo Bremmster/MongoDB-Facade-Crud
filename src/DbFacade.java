@@ -5,6 +5,7 @@
 import com.mongodb.*;
 import com.mongodb.client.*;
 import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -74,16 +75,43 @@ public class DbFacade {
         return Person.fromDoc(collection.find(doc).first());
     }
 
+    public Person findByAge(int age) {
+        Document doc = new Document("age", age);
+        return Person.fromDoc(collection.find(doc).first());
+    }
+    public Person findByCustomerNo(String CustomerNo) {
+        Document doc = new Document("CustomerNo", CustomerNo);
+        return Person.fromDoc(collection.find(doc).first());
+    }
+    public Person findByEmployeeNo(String EmployeeNo) {
+        Document doc = new Document("EmployeeNo", EmployeeNo);
+        return Person.fromDoc(collection.find(doc).first());
+    }
 
     public void delete(ObjectId id) {
         Document doc = new Document("_id", id);
         collection.deleteOne(doc);
     }
 
-    /*public void update(String id) {
-        Document doc = new Document("_id", id);
-        collection.updateOne(doc);
-    }*/
+    public void update(String id, String newName, int newAge, String newAddress, int newZipcode, String newCity) {
+
+        // Create a query that matches the document with the given _id value
+        BasicDBObject query = new BasicDBObject("_id", new ObjectId(id));
+
+        // Create an update that sets the value of a field to the new value
+        BasicDBObject update = new BasicDBObject("$set", new BasicDBObject("name", newName)
+                .append("age", newAge)
+                .append("address", newAddress)
+                .append("zipcode", newZipcode)
+                .append("city", newCity));
+
+        // Call the updateOne method with the query and update objects
+        UpdateResult result = collection.updateOne(query, update);
+
+        // Print the number of documents updated
+        System.out.println(result.getModifiedCount() + " document(s) updated.");
+
+    }
 
     public List<Person> find(String name) {
         Document query = new Document("name", name);
@@ -130,14 +158,36 @@ public class DbFacade {
         }
         return people;
     }
+    public List<Person> findAll() {
 
-    public Person findName(String name) {
-        Document query = new Document("name", name);
+        // Följande tre rader är framtagna med hjälp av chatGPT
+        Pattern pattern = Pattern.compile(".*");
+        BasicDBObject query = new BasicDBObject();
+        query.put("name", new BasicDBObject("$regex", pattern));
+
+
         MongoCursor<Document> cursor = collection.find(query).iterator();
+
+        ArrayList<Person> people = new ArrayList<>();
 
         while (cursor.hasNext()) {
             Document document = cursor.next();
 
+            if (document.containsKey("customerNo")) {
+                people.add(Customer.fromDoc(document));
+            } else if (document.containsKey("employeeNo")) {
+                people.add(Employee.fromDoc(document));
+            } else {
+                people.add(Person.fromDoc(document));
+            }
+        }
+        return people;
+    }
+
+    public Person findName(String name) {
+        Document query = new Document("name", name);
+
+        for (Document document : collection.find(query)) {
             if (document.containsKey("customerNo")) {
                 return Customer.fromDoc(document);
             } else if (document.containsKey("employeeNo")) {
