@@ -27,14 +27,7 @@ public class Main {
         System.out.println(db.find("Larry"));
         System.out.println(db.find("Barry"));
 
-        // todo remove or move code
-//        KeyReader keyReader = new KeyReader("api.key");
-//        System.out.println(keyReader.getKey("apiKey"));
-//        System.out.println(keyReader.getKey("usrName"));
-
-
-
-
-
+ 
+        db.close();
     }
 }

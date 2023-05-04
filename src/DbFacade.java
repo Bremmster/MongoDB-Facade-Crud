@@ -29,6 +29,7 @@ public class DbFacade {
         this.collectionName = collectionName;
         connect();
     }
+
     public DbFacade(KeyReader key) {
         this.connString = "mongodb+srv://" + key.getKey("usrName") + ":" + key.getKey("apiKey") + "@cluster0.lb6kqnd.mongodb.net/?retryWrites=true&w=majority";
         this.dbName = "Person";
@@ -75,6 +76,7 @@ public class DbFacade {
 
         return Person.fromDoc(search);
     }
+
     public void delete(String id) {
         Document doc = new Document("id", id);
         collection.deleteOne(doc);
@@ -86,8 +88,17 @@ public class DbFacade {
 
         ArrayList<Person> people = new ArrayList<>();
 
-        result.forEach(person -> people.add(Person.fromDoc(person)));
+        while (cursor.hasNext()) {
+            Document document = cursor.next();
 
+            if (document.containsKey("customerNo")) {
+                people.add(Customer.fromDoc(document));
+            } else if (document.containsKey("employeeNo")) {
+                people.add(Employee.fromDoc(document));
+            } else {
+                people.add(Person.fromDoc(document));
+            }
+        }
         return people;
     }
 

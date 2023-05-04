@@ -17,6 +17,10 @@ public class Employee extends Person {
         this.employeeNo = employeeNo;
     }
 
+    public Employee() {
+
+    }
+
 
     public Document toDoc() {
         return new Document("name", name)
@@ -26,6 +30,20 @@ public class Employee extends Person {
                 .append("city", city)
                 .append("employeeNo", employeeNo)
                 .append("_id", dbId);
+    }
+    public static Employee fromDoc(Document document) {
+        if (document == null) {
+            return new Employee();
+        }
+        // ObjectId dbId, String name, int age, String address, int zipcode, String city, String customerNo
+        return new Employee(
+                document.getObjectId("_id"),
+                document.getString("name"),
+                document.getInteger("age"),
+                document.getString("address"),
+                document.getInteger("zipcode"),
+                document.getString("city"),
+                document.getString("employeeNo"));
     }
 
     @Override

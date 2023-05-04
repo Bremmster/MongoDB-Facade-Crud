@@ -7,6 +7,9 @@ import org.bson.types.ObjectId;
 public class Customer extends Person{
     private String customerNo;
 
+    public Customer() {
+    }
+
     public Customer(ObjectId dbId, String name, int age, String address, int zipcode, String city, String customerNo) {
         super(dbId, name, age, address, zipcode, city);
         this.customerNo = customerNo;
@@ -16,6 +19,7 @@ public class Customer extends Person{
         super(name, age, address, zipcode, city);
         this.customerNo = customerNo;
     }
+
     public Document toDoc() {
         return new Document("name", name)
                 .append("age", age)
@@ -24,6 +28,21 @@ public class Customer extends Person{
                 .append("city", city)
                 .append("customerNo", customerNo)
                 .append("_id", dbId);
+    }
+
+    public static Customer fromDoc(Document document) {
+        if (document == null) {
+            return new Customer();
+        }
+        // ObjectId dbId, String name, int age, String address, int zipcode, String city, String customerNo
+        return new Customer(
+                document.getObjectId("_id"),
+                document.getString("name"),
+                document.getInteger("age"),
+                document.getString("address"),
+                document.getInteger("zipcode"),
+                document.getString("city"),
+                document.getString("customerNo"));
     }
 
     @Override
