@@ -81,11 +81,11 @@ public class DbFacade {
     }
     public Person findByCustomerNo(String CustomerNo) {
         Document doc = new Document("CustomerNo", CustomerNo);
-        return Person.fromDoc(collection.find(doc).first());
+        return Customer.fromDoc(collection.find(doc).first());
     }
     public Person findByEmployeeNo(String EmployeeNo) {
         Document doc = new Document("EmployeeNo", EmployeeNo);
-        return Person.fromDoc(collection.find(doc).first());
+        return Employee.fromDoc(collection.find(doc).first());
     }
 
     public void delete(ObjectId id) {
