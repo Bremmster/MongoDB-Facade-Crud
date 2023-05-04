@@ -20,6 +20,14 @@ public class Customer extends Person{
         this.customerNo = customerNo;
     }
 
+    public String getCustomerNo() {
+        return customerNo;
+    }
+
+    public void setCustomerNo(String customerNo) {
+        this.customerNo = customerNo;
+    }
+
     public Document toDoc() {
         return new Document("name", name)
                 .append("age", age)

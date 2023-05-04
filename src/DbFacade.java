@@ -2,10 +2,7 @@
  * @author Kristian Karlson
  */
 
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.ServerApi;
-import com.mongodb.ServerApiVersion;
+import com.mongodb.*;
 import com.mongodb.client.*;
 import com.mongodb.client.model.IndexOptions;
 import org.bson.Document;
@@ -13,6 +10,7 @@ import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 public class DbFacade {
@@ -105,6 +103,50 @@ public class DbFacade {
             }
         }
         return people;
+    }
+
+    public List<Person> findType(String type) {
+
+        // Följande tre rader är framtagna med hjälp av chatGPT
+        Pattern pattern = Pattern.compile(".*");
+        BasicDBObject query = new BasicDBObject();
+        query.put(type, new BasicDBObject("$regex", pattern));
+
+
+        MongoCursor<Document> cursor = collection.find(query).iterator();
+
+        ArrayList<Person> people = new ArrayList<>();
+
+        while (cursor.hasNext()) {
+            Document document = cursor.next();
+
+            if (document.containsKey("customerNo")) {
+                people.add(Customer.fromDoc(document));
+            } else if (document.containsKey("employeeNo")) {
+                people.add(Employee.fromDoc(document));
+            } else {
+                people.add(Person.fromDoc(document));
+            }
+        }
+        return people;
+    }
+
+    public Person findName(String name) {
+        Document query = new Document("name", name);
+        MongoCursor<Document> cursor = collection.find(query).iterator();
+
+        while (cursor.hasNext()) {
+            Document document = cursor.next();
+
+            if (document.containsKey("customerNo")) {
+                return Customer.fromDoc(document);
+            } else if (document.containsKey("employeeNo")) {
+                return Employee.fromDoc(document);
+            } else {
+                return Person.fromDoc(document);
+            }
+        }
+        return null;
     }
 
     public void close() {

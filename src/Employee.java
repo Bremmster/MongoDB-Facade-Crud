@@ -21,6 +21,14 @@ public class Employee extends Person {
 
     }
 
+    public String getEmployeeNo() {
+        return employeeNo;
+    }
+
+    public void setEmployeeNo(String employeeNo) {
+        this.employeeNo = employeeNo;
+    }
+
     public static Employee fromDoc(Document document) {
         if (document == null) {
             return new Employee();
