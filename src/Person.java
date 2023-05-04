@@ -9,8 +9,8 @@ public class Person {
 
     // Skapa en Java-modell för "Person" med följande egenskaper: "namn", "ålder" och "adress".
 
-    @BsonProperty(value = "_id")
-    protected ObjectId dbId;
+    @BsonProperty(value = "_id") // Makes it possible to follow the Java language naming convention for dbId
+    protected static ObjectId dbId;
     protected String name;
     protected int age;
     protected String address;
@@ -65,22 +65,18 @@ public class Person {
                 .append("_id", dbId);
     }
 
-    public String toJson() {
-        return toDoc().toJson();
+
+    public ObjectId getDbId() {
+        // To get the _id from object
+        // this is
+        return dbId;
     }
-
-    // todo print employee no or customer id
-    // should it be solved here oc in respective class?
-    // (Person instanceof Employee) ? "" : "";
-
-
     @Override
     public String toString() {
-        return "{_id='" + dbId + '\'' +
+        return "_id='" + dbId + '\'' +
                ", name='" + name + '\'' +
                ", age=" + age +
                ", address='" + address + '\'' +
                ", zipcode=" + zipcode +
-               ", city='" + city + '\'' +
-               '}';
+               ", city='" + city + '\'';
     }}

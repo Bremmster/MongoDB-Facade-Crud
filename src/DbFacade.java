@@ -9,6 +9,7 @@ import com.mongodb.ServerApiVersion;
 import com.mongodb.client.*;
 import com.mongodb.client.model.IndexOptions;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +64,7 @@ public class DbFacade {
     }
 
     public void insertOne(Person person) {
-
+        // handles person and the inherited classes
         Document doc = person.toDoc();
         doc.remove("_id");
         var find = collection.find(doc);
@@ -71,16 +72,20 @@ public class DbFacade {
     }
 
     public Person findById(String id) {
-        Document doc = new Document("id", id);
-        Document search = collection.find(doc).first();
-
-        return Person.fromDoc(search);
+        Document doc = new Document("_id", new ObjectId(id));
+        return Person.fromDoc(collection.find(doc).first());
     }
 
-    public void delete(String id) {
-        Document doc = new Document("id", id);
+
+    public void delete(ObjectId id) {
+        Document doc = new Document("_id", id);
         collection.deleteOne(doc);
     }
+
+    /*public void update(String id) {
+        Document doc = new Document("_id", id);
+        collection.updateOne(doc);
+    }*/
 
     public List<Person> find(String name) {
         Document query = new Document("name", name);

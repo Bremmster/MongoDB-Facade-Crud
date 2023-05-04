@@ -21,21 +21,10 @@ public class Employee extends Person {
 
     }
 
-
-    public Document toDoc() {
-        return new Document("name", name)
-                .append("age", age)
-                .append("address", address)
-                .append("zipcode", zipcode)
-                .append("city", city)
-                .append("employeeNo", employeeNo)
-                .append("_id", dbId);
-    }
     public static Employee fromDoc(Document document) {
         if (document == null) {
             return new Employee();
         }
-        // ObjectId dbId, String name, int age, String address, int zipcode, String city, String customerNo
         return new Employee(
                 document.getObjectId("_id"),
                 document.getString("name"),
@@ -46,15 +35,24 @@ public class Employee extends Person {
                 document.getString("employeeNo"));
     }
 
+    public Document toDoc() {
+        return new Document("name", name)
+                .append("age", age)
+                .append("address", address)
+                .append("zipcode", zipcode)
+                .append("city", city)
+                .append("employeeNo", employeeNo)
+                .append("_id", dbId);
+    }
+
     @Override
     public String toString() {
-        return "employeeNo='" + employeeNo + '\'' +
-               ", _id='" + dbId + '\'' +
+        return "_id='" + dbId + '\'' +
                ", name='" + name + '\'' +
                ", age=" + age +
                ", address='" + address + '\'' +
                ", zipcode=" + zipcode +
                ", city='" + city + '\'' +
-               '}';
+               ", employeeNo='" + employeeNo + '\'';
     }
 }
