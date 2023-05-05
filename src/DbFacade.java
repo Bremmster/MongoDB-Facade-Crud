@@ -100,18 +100,18 @@ public class DbFacade {
         collection.deleteOne(doc);
     }
 
-    public void update(String id, String newName, int newAge, String newAddress, int newZipcode, String newCity) {
+    public void update(String id, Person person) {
 
         // Create a query that matches the document with the given _id value
         Document query = new Document("_id", new ObjectId(id));
 
         // Create an update that sets the value of a field to the new value
-        Document update = new Document("$set", new BasicDBObject("name", newName)
-                .append("age", newAge)
-                .append("address", newAddress)
-                .append("zipcode", newZipcode)
-                .append("city", newCity));
-
+        Document update = new Document("$set", new BasicDBObject("name", person.getName())
+                .append("age", person.age)
+                .append("address", person.getAddress())
+                .append("zipcode", person.getZipcode())
+                .append("city", person.getCity()));
+                // Customer or Employee number will never change
         // Call the updateOne method with the query and update objects
         UpdateResult result = collection.updateOne(query, update);
 

@@ -18,7 +18,7 @@ public class Main {
 
         findNames(db); // finds names from members in database
 
-        System.out.println("search by age\n" + db.findByAge(42));
+        System.out.println("\nsearch by age\n" + db.findByAge(42));
 
         searchById(db); // search for specific id
 
@@ -42,7 +42,7 @@ public class Main {
     }
 
     private static void getAllPersons(DbFacade db) {
-        System.out.println("List of all persons in database");
+        System.out.println("\nList of all persons in database");
         List<Person> persons = db.findAll();
         for (Person person : persons) {
             System.out.println(person);
@@ -50,15 +50,21 @@ public class Main {
     }
 
     private static void updatePerson(DbFacade db) {
-        System.out.println("update Kalle Anka to Joakim von Anka");
         var person = db.findName("Kalle Anka");
+        System.out.println("\nupdate Kalle Anka to Joakim von Anka. Before update\n" + person.toString());
 
-        db.update(String.valueOf(person.getDbId()), "Joakim von Anka", 67, "Pengabingen 1", 12345, "Ankeborg");
+        person.setName("Joakim von Anka");
+        person.setAge(67);
+        person.setAddress("Pengabingen 1");
+        person.setZipcode(12345);
+        person.setCity("Ankeborg");
 
+        db.update(String.valueOf(person.getDbId()), person);
+        System.out.println("After update\n" + db.findById(person.getDbId().toString()));
     }
 
     private static void searchByField(DbFacade db) {
-        System.out.println("Search for Customers: ");
+        System.out.println("\nSearch for Customers: ");
         List<Person> customers = db.findType("customerNo");
         for (Person person : customers) {
             System.out.println(person);
@@ -66,12 +72,12 @@ public class Main {
     }
 
     private static void searchById(DbFacade db) {
-        System.out.println("Search by _id: ");
+        System.out.println("\nSearch by _id: ");
         System.out.println(db.findById("645388d63ab03d7e8b764daa")); // Finds Barry
     }
 
     private static void findNames(DbFacade db) {
-        System.out.println("Search for different names: ");
+        System.out.println("\nSearch for different names: ");
         System.out.println(db.findName("Kalle Anka")); // Prints Kalle Anka as a Person
         System.out.println(db.findName("Larry")); // Prints Larry as a Customer
         System.out.println(db.findName("Barry")); // Prints Barry as an Employee
