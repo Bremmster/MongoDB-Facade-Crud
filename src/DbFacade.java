@@ -2,16 +2,16 @@
  * @author Kristian Karlson
  */
 
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.ServerApi;
-import com.mongodb.ServerApiVersion;
+import com.mongodb.*;
 import com.mongodb.client.*;
 import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 public class DbFacade {
@@ -32,8 +32,8 @@ public class DbFacade {
 
     public DbFacade(KeyReader key) {
         this.connString = "mongodb+srv://" + key.getKey("usrName") + ":" + key.getKey("apiKey") + "@cluster0.lb6kqnd.mongodb.net/?retryWrites=true&w=majority";
-        this.dbName = "Person";
-        this.collectionName = "public_person";
+        this.dbName = "People";
+        this.collectionName = "Persons";
         connect();
     }
 
@@ -63,34 +63,76 @@ public class DbFacade {
     }
 
     public void insertOne(Person person) {
-
+        // handles person and the inherited classes
         Document doc = person.toDoc();
         doc.remove("_id");
         var find = collection.find(doc);
         if (find.first() == null) collection.insertOne(doc);
     }
 
-    public Person findById(String id) {
-        Document doc = new Document("id", id);
-        Document search = collection.find(doc).first();
-
-        return Person.fromDoc(search);
+    public Person findName(String name) {
+        Document query = new Document("name", name);
+        return getPerson(query);
     }
 
-    public void delete(String id) {
-        Document doc = new Document("id", id);
+    public Person findById(String id) {
+        Document query = new Document("_id", new ObjectId(id));
+        return getPerson(query);
+    }
+
+    public Person findByAge(int age) {
+        Document query = new Document("age", age);
+        return getPerson(query);
+    }
+
+    public Person findByCustomerNo(String CustomerNo) {
+        Document query = new Document("CustomerNo", CustomerNo);
+        return getPerson(query);
+    }
+
+    public Person findByEmployeeNo(String EmployeeNo) {
+        Document query = new Document("EmployeeNo", EmployeeNo);
+        return getPerson(query);
+    }
+
+    public void delete(ObjectId id) {
+        Document doc = new Document("_id", id);
         collection.deleteOne(doc);
+    }
+
+    public void update(String id, String newName, int newAge, String newAddress, int newZipcode, String newCity) {
+
+        // Create a query that matches the document with the given _id value
+        Document query = new Document("_id", new ObjectId(id));
+
+        // Create an update that sets the value of a field to the new value
+        Document update = new Document("$set", new BasicDBObject("name", newName)
+                .append("age", newAge)
+                .append("address", newAddress)
+                .append("zipcode", newZipcode)
+                .append("city", newCity));
+
+        // Call the updateOne method with the query and update objects
+        UpdateResult result = collection.updateOne(query, update);
+
+        // Print the number of documents updated
+        System.out.println(result.getModifiedCount() + " document(s) updated.");
+
     }
 
     public List<Person> find(String name) {
         Document query = new Document("name", name);
-        MongoCursor<Document> cursor = collection.find(query).iterator();
+        return getPeople(collection.find(query));
+    }
+
+    private ArrayList<Person> getPeople(FindIterable<Document> collection) {
+
+        MongoCursor<Document> cursor = collection.iterator();
 
         ArrayList<Person> people = new ArrayList<>();
 
         while (cursor.hasNext()) {
             Document document = cursor.next();
-
             if (document.containsKey("customerNo")) {
                 people.add(Customer.fromDoc(document));
             } else if (document.containsKey("employeeNo")) {
@@ -100,6 +142,38 @@ public class DbFacade {
             }
         }
         return people;
+    }
+
+    public List<Person> findType(String type) {
+
+        // Följande tre rader är framtagna med hjälp av chatGPT
+        Pattern pattern = Pattern.compile(".*");
+        Document query = new Document();
+        query.put(type, new Document("$regex", pattern));
+        return getPeople(collection.find(query));
+    }
+
+    public List<Person> findAll() {
+
+        // Följande tre rader är framtagna med hjälp av chatGPT
+        Pattern pattern = Pattern.compile(".*");
+        Document query = new Document();
+        query.put("name", new Document("$regex", pattern));
+        return getPeople(collection.find(query));
+    }
+
+    private Person getPerson(Document query) {
+
+        for (Document document : collection.find(query)) {
+            if (document.containsKey("customerNo")) {
+                return Customer.fromDoc(document);
+            } else if (document.containsKey("employeeNo")) {
+                return Employee.fromDoc(document);
+            } else {
+                return Person.fromDoc(document);
+            }
+        }
+        return null;
     }
 
     public void close() {

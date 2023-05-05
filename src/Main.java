@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,10 +14,6 @@ public class Main {
 
         DbFacade db = new DbFacade(new KeyReader("api.key"));
 
-<<<<<<< Updated upstream
-        Person person = new Person("Kalle Anka", 32, "Blomstergatan 24", 31313, "Ankeborg");
-        db.insertOne(person);
-=======
         addData(db); // adds Person Customer and Employee to the database
 
         findNames(db); // finds names from members in database
@@ -84,20 +81,16 @@ public class Main {
         System.out.println("adding data");
         Person kalleAnka = new Person("Kalle Anka", 32, "Blomstergatan 24", 31313, "Ankeborg");
         db.insertOne(kalleAnka);
->>>>>>> Stashed changes
+
 
         Customer customer = new Customer("Larry", 24, "Road 1", 54312, "soCal", "234");
         db.insertOne(customer);
 
+        Customer customer1 = new Customer("Doris", 54, "Street 99", 43131, "New York", "543");
+        db.insertOne(customer1);
+
         Employee employee = new Employee("Barry", 42, "Outback 1", 2324, "Texas", "1");
-
         db.insertOne(employee);
-
-        System.out.println(db.find("Kalle Anka"));
-        System.out.println(db.find("Larry"));
-        System.out.println(db.find("Barry"));
-
- 
-        db.close();
     }
 }
+

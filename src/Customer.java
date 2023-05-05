@@ -20,6 +20,14 @@ public class Customer extends Person{
         this.customerNo = customerNo;
     }
 
+    public String getCustomerNo() {
+        return customerNo;
+    }
+
+    public void setCustomerNo(String customerNo) {
+        this.customerNo = customerNo;
+    }
+
     public Document toDoc() {
         return new Document("name", name)
                 .append("age", age)
@@ -47,13 +55,12 @@ public class Customer extends Person{
 
     @Override
     public String toString() {
-        return ",customerNo='" + customerNo + '\'' +
-               ", _id='" + dbId + '\'' +
-               ", name='" + name + '\'' +
-               ", age=" + age +
-               ", address='" + address + '\'' +
-               ", zipcode=" + zipcode +
-               ", city='" + city + '\'' +
-               '}';
+        return "_id = '" + dbId + '\'' +
+               ", name = '" + name + '\'' +
+               ", age = " + age +
+               ", address = '" + address + '\'' +
+               ", zipcode = " + zipcode +
+               ", city = '" + city + '\'' +
+               ", customerNo = '" + customerNo + '\'';
     }
 }

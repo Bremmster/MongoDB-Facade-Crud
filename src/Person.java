@@ -9,7 +9,7 @@ public class Person {
 
     // Skapa en Java-modell för "Person" med följande egenskaper: "namn", "ålder" och "adress".
 
-    @BsonProperty(value = "_id")
+    @BsonProperty(value = "_id") // Makes it possible to follow the Java language naming convention for dbId
     protected ObjectId dbId;
     protected String name;
     protected int age;
@@ -37,6 +37,7 @@ public class Person {
     public Person() {
     }
 
+
     public static Person fromDoc(Document document) {
         if (document == null) {
             return new Person();
@@ -56,6 +57,46 @@ public class Person {
         return fromDoc(doc);
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public int getZipcode() {
+        return zipcode;
+    }
+
+    public void setZipcode(int zipcode) {
+        this.zipcode = zipcode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
     public Document toDoc() {
         return new Document("name", name)
                 .append("age", age)
@@ -65,22 +106,21 @@ public class Person {
                 .append("_id", dbId);
     }
 
-    public String toJson() {
-        return toDoc().toJson();
+    public ObjectId getDbId() {
+        return dbId;
     }
 
-    // todo print employee no or customer id
-    // should it be solved here oc in respective class?
-    // (Person instanceof Employee) ? "" : "";
-
+    public void setDbId(ObjectId dbId) {
+        this.dbId = dbId;
+    }
 
     @Override
     public String toString() {
-        return "{_id='" + dbId + '\'' +
-               ", name='" + name + '\'' +
-               ", age=" + age +
-               ", address='" + address + '\'' +
-               ", zipcode=" + zipcode +
-               ", city='" + city + '\'' +
-               '}';
-    }}
+        return "_id = '" + dbId + '\'' +
+               ", name = '" + name + '\'' +
+               ", age = " + age +
+               ", address = '" + address + '\'' +
+               ", zipcode = " + zipcode +
+               ", city = '" + city + '\'';
+    }
+}
