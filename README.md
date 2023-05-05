@@ -1,5 +1,7 @@
 # MongoDB-Facade-Crud
 Inlämningsuppgift Jin23DA
+
+# När du ska kontrollera inlämningen säg till så tillåter jag alla ip adresser att ansluta molndatabasen 
 ## Uppgiften
 Du ska skapa en modell för Person, den ska sedan ärvas av Kund och Anställd.
 + [x] Klart programmet hanterar tre typer av Person objekt, Person, Customer och Employee. 
