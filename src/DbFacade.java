@@ -23,15 +23,15 @@ public class DbFacade {
     private String connString;
     private String dbName;
 
-    public DbFacade(KeyReader key, String dbName, String collectionName) {
-        this.connString = "mongodb+srv://" + key.getKey("usrName") + ":" + key.getKey("apiKey") + "@cluster0.lb6kqnd.mongodb.net/?retryWrites=true&w=majority";
+    public DbFacade(String address, String dbName, String collectionName) {
+        this.connString = address;
         this.dbName = dbName;
         this.collectionName = collectionName;
         connect();
     }
 
     public DbFacade(KeyReader key) {
-        this.connString = "mongodb+srv://" + key.getKey("usrName") + ":" + key.getKey("apiKey") + "@cluster0.lb6kqnd.mongodb.net/?retryWrites=true&w=majority";
+        this.connString = "mongodb+srv://" + key.getKey("usrName") + ":" + key.getKey("apiKey") + "@" + key.getKey("dbA");
         this.dbName = "People";
         this.collectionName = "Persons";
         connect();

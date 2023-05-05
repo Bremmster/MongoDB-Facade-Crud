@@ -12,13 +12,13 @@ public class Main {
         Logger.getLogger("org.mongodb.driver")
                 .setLevel(Level.SEVERE);
 
-        DbFacade db = new DbFacade(new KeyReader("api.key"));
+        DbFacade db = selectMode();
 
         addData(db); // adds Person Customer and Employee to the database
 
         findNames(db); // finds names from members in database
 
-        System.out.println("\nsearch by age\n" + db.findByAge(42));
+        searchByAge(db);
 
         searchById(db); // search for specific id
 
@@ -33,6 +33,27 @@ public class Main {
 
         db.close(); // close the database
 
+    }
+
+    private static DbFacade selectMode() {
+
+        while (true) {
+            System.out.println("Chose database to Connect");
+            System.out.println("1: Cloud\n2: localhost (untested)");
+            switch (UsrInput.Int()) {
+
+                case 1 -> {
+                    return new DbFacade(new KeyReader("api.key"));
+                }
+                case 2 -> {
+                    return new DbFacade("mongodb://localhost:27017/", "People", "persons");
+                }
+            }
+        }
+    }
+
+    private static void searchByAge(DbFacade db) {
+        System.out.println("\nsearch by age\n" + db.findByAge(42));
     }
 
     private static void deletePerson(DbFacade db) {
@@ -73,7 +94,8 @@ public class Main {
 
     private static void searchById(DbFacade db) {
         System.out.println("\nSearch by _id: ");
-        System.out.println(db.findById("645388d63ab03d7e8b764daa")); // Finds Barry
+        var person = db.findName("Barry"); // here to get a _id from the database
+        System.out.println(db.findById(person.getDbId().toString())); // Search with the found _id
     }
 
     private static void findNames(DbFacade db) {
