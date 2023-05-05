@@ -55,12 +55,12 @@ public class Customer extends Person{
 
     @Override
     public String toString() {
-        return "_id='" + dbId + '\'' +
-               ", name='" + name + '\'' +
-               ", age=" + age +
-               ", address='" + address + '\'' +
-               ", zipcode=" + zipcode +
-               ", city='" + city + '\'' +
-               ", customerNo='" + customerNo + '\'';
+        return "_id = '" + dbId + '\'' +
+               ", name = '" + name + '\'' +
+               ", age = " + age +
+               ", address = '" + address + '\'' +
+               ", zipcode = " + zipcode +
+               ", city = '" + city + '\'' +
+               ", customerNo = '" + customerNo + '\'';
     }
 }

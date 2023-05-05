@@ -55,12 +55,12 @@ public class Employee extends Person {
 
     @Override
     public String toString() {
-        return "_id='" + dbId + '\'' +
-               ", name='" + name + '\'' +
-               ", age=" + age +
-               ", address='" + address + '\'' +
-               ", zipcode=" + zipcode +
-               ", city='" + city + '\'' +
-               ", employeeNo='" + employeeNo + '\'';
+        return "_id = '" + dbId + '\'' +
+               ", name = '" + name + '\'' +
+               ", age = " + age +
+               ", address = '" + address + '\'' +
+               ", zipcode = " + zipcode +
+               ", city = '" + city + '\'' +
+               ", employeeNo = '" + employeeNo + '\'';
     }
 }

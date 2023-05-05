@@ -116,11 +116,11 @@ public class Person {
 
     @Override
     public String toString() {
-        return "_id='" + dbId + '\'' +
-               ", name='" + name + '\'' +
-               ", age=" + age +
-               ", address='" + address + '\'' +
-               ", zipcode=" + zipcode +
-               ", city='" + city + '\'';
+        return "_id = '" + dbId + '\'' +
+               ", name = '" + name + '\'' +
+               ", age = " + age +
+               ", address = '" + address + '\'' +
+               ", zipcode = " + zipcode +
+               ", city = '" + city + '\'';
     }
 }

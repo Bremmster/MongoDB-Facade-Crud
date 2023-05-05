@@ -32,8 +32,8 @@ public class DbFacade {
 
     public DbFacade(KeyReader key) {
         this.connString = "mongodb+srv://" + key.getKey("usrName") + ":" + key.getKey("apiKey") + "@cluster0.lb6kqnd.mongodb.net/?retryWrites=true&w=majority";
-        this.dbName = "Person";
-        this.collectionName = "public_person";
+        this.dbName = "People";
+        this.collectionName = "Persons";
         connect();
     }
 
@@ -70,22 +70,29 @@ public class DbFacade {
         if (find.first() == null) collection.insertOne(doc);
     }
 
+    public Person findName(String name) {
+        Document query = new Document("name", name);
+        return getPerson(query);
+    }
+
     public Person findById(String id) {
-        Document doc = new Document("_id", new ObjectId(id));
-        return Person.fromDoc(collection.find(doc).first());
+        Document query = new Document("_id", new ObjectId(id));
+        return getPerson(query);
     }
 
     public Person findByAge(int age) {
-        Document doc = new Document("age", age);
-        return Person.fromDoc(collection.find(doc).first());
+        Document query = new Document("age", age);
+        return getPerson(query);
     }
+
     public Person findByCustomerNo(String CustomerNo) {
-        Document doc = new Document("CustomerNo", CustomerNo);
-        return Customer.fromDoc(collection.find(doc).first());
+        Document query = new Document("CustomerNo", CustomerNo);
+        return getPerson(query);
     }
+
     public Person findByEmployeeNo(String EmployeeNo) {
-        Document doc = new Document("EmployeeNo", EmployeeNo);
-        return Employee.fromDoc(collection.find(doc).first());
+        Document query = new Document("EmployeeNo", EmployeeNo);
+        return getPerson(query);
     }
 
     public void delete(ObjectId id) {
@@ -96,10 +103,10 @@ public class DbFacade {
     public void update(String id, String newName, int newAge, String newAddress, int newZipcode, String newCity) {
 
         // Create a query that matches the document with the given _id value
-        BasicDBObject query = new BasicDBObject("_id", new ObjectId(id));
+        Document query = new Document("_id", new ObjectId(id));
 
         // Create an update that sets the value of a field to the new value
-        BasicDBObject update = new BasicDBObject("$set", new BasicDBObject("name", newName)
+        Document update = new Document("$set", new BasicDBObject("name", newName)
                 .append("age", newAge)
                 .append("address", newAddress)
                 .append("zipcode", newZipcode)
@@ -115,13 +122,17 @@ public class DbFacade {
 
     public List<Person> find(String name) {
         Document query = new Document("name", name);
-        MongoCursor<Document> cursor = collection.find(query).iterator();
+        return getPeople(collection.find(query));
+    }
+
+    private ArrayList<Person> getPeople(FindIterable<Document> collection) {
+
+        MongoCursor<Document> cursor = collection.iterator();
 
         ArrayList<Person> people = new ArrayList<>();
 
         while (cursor.hasNext()) {
             Document document = cursor.next();
-
             if (document.containsKey("customerNo")) {
                 people.add(Customer.fromDoc(document));
             } else if (document.containsKey("employeeNo")) {
@@ -137,55 +148,21 @@ public class DbFacade {
 
         // Följande tre rader är framtagna med hjälp av chatGPT
         Pattern pattern = Pattern.compile(".*");
-        BasicDBObject query = new BasicDBObject();
-        query.put(type, new BasicDBObject("$regex", pattern));
-
-
-        MongoCursor<Document> cursor = collection.find(query).iterator();
-
-        ArrayList<Person> people = new ArrayList<>();
-
-        while (cursor.hasNext()) {
-            Document document = cursor.next();
-
-            if (document.containsKey("customerNo")) {
-                people.add(Customer.fromDoc(document));
-            } else if (document.containsKey("employeeNo")) {
-                people.add(Employee.fromDoc(document));
-            } else {
-                people.add(Person.fromDoc(document));
-            }
-        }
-        return people;
+        Document query = new Document();
+        query.put(type, new Document("$regex", pattern));
+        return getPeople(collection.find(query));
     }
+
     public List<Person> findAll() {
 
         // Följande tre rader är framtagna med hjälp av chatGPT
         Pattern pattern = Pattern.compile(".*");
-        BasicDBObject query = new BasicDBObject();
-        query.put("name", new BasicDBObject("$regex", pattern));
-
-
-        MongoCursor<Document> cursor = collection.find(query).iterator();
-
-        ArrayList<Person> people = new ArrayList<>();
-
-        while (cursor.hasNext()) {
-            Document document = cursor.next();
-
-            if (document.containsKey("customerNo")) {
-                people.add(Customer.fromDoc(document));
-            } else if (document.containsKey("employeeNo")) {
-                people.add(Employee.fromDoc(document));
-            } else {
-                people.add(Person.fromDoc(document));
-            }
-        }
-        return people;
+        Document query = new Document();
+        query.put("name", new Document("$regex", pattern));
+        return getPeople(collection.find(query));
     }
 
-    public Person findName(String name) {
-        Document query = new Document("name", name);
+    private Person getPerson(Document query) {
 
         for (Document document : collection.find(query)) {
             if (document.containsKey("customerNo")) {

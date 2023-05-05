@@ -18,6 +18,8 @@ public class Main {
 
         findNames(db); // finds names from members in database
 
+        System.out.println("search by age\n" + db.findByAge(42));
+
         searchById(db); // search for specific id
 
         searchByField(db); // Search for a field i the database list all documents containing
@@ -28,11 +30,6 @@ public class Main {
 
         deletePerson(db);
 
-        /*System.out.println("Delete Kalle Anka uses Search by _id");
-
-        System.out.println(kalleAnka.getDbId()); // removes kalle anka from database
-        System.out.println(customer.getDbId());
-        System.out.println(employee.getDbId()); */
 
         db.close(); // close the database
 
@@ -55,6 +52,7 @@ public class Main {
     private static void updatePerson(DbFacade db) {
         System.out.println("update Kalle Anka to Joakim von Anka");
         var person = db.findName("Kalle Anka");
+        
         db.update(String.valueOf(person.getDbId()), "Joakim von Anka", 67, "Pengabingen 1", 12345, "Ankeborg");
 
     }
@@ -74,9 +72,9 @@ public class Main {
 
     private static void findNames(DbFacade db) {
         System.out.println("Search for different names: ");
-        System.out.println(db.find("Kalle Anka")); // Prints Kalle Anka as a Person
-        System.out.println(db.find("Larry")); // Prints Larry as a Customer
-        System.out.println(db.find("Barry")); // Prints Barry as an Employee
+        System.out.println(db.findName("Kalle Anka")); // Prints Kalle Anka as a Person
+        System.out.println(db.findName("Larry")); // Prints Larry as a Customer
+        System.out.println(db.findName("Barry")); // Prints Barry as an Employee
     }
 
     public static void addData(DbFacade db) {
