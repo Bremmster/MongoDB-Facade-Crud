@@ -6,22 +6,17 @@ import java.util.Scanner;
 public class UsrInput {
 
 
-    public static String String() {
-        Scanner scanner = new Scanner(System.in);
-        return scanner.toString();
-    }
     public static int Int() {
         // try catch to get int
         Scanner scanner = new Scanner(System.in);
-        int input = 0;
+        int input;
         while (true) {
             try {
                 input = Integer.parseInt(scanner.nextLine());
-                break;
+                return input;
             } catch (Exception e) {
                 System.out.println("not a valid integer " + e.getMessage());
             }
         }
-        return input;
     }
 }

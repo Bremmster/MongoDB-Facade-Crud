@@ -20,18 +20,18 @@ public class DbFacade {
     MongoClient mongoClient;
     private MongoDatabase db;
     private MongoCollection<Document> collection;
-    private String connString;
-    private String dbName;
+    private final String connString;
+    private final String dbName;
 
-    public DbFacade(KeyReader key, String dbName, String collectionName) {
-        this.connString = "mongodb+srv://" + key.getKey("usrName") + ":" + key.getKey("apiKey") + "@cluster0.lb6kqnd.mongodb.net/?retryWrites=true&w=majority";
+    public DbFacade(String address, String dbName, String collectionName) {
+        this.connString = address;
         this.dbName = dbName;
         this.collectionName = collectionName;
         connect();
     }
 
     public DbFacade(KeyReader key) {
-        this.connString = "mongodb+srv://" + key.getKey("usrName") + ":" + key.getKey("apiKey") + "@cluster0.lb6kqnd.mongodb.net/?retryWrites=true&w=majority";
+        this.connString = "mongodb+srv://" + key.getKey("usrName") + ":" + key.getKey("apiKey") + "@" + key.getKey("dbA");
         this.dbName = "People";
         this.collectionName = "Persons";
         connect();
@@ -100,18 +100,18 @@ public class DbFacade {
         collection.deleteOne(doc);
     }
 
-    public void update(String id, String newName, int newAge, String newAddress, int newZipcode, String newCity) {
+    public void update(String id, Person person) {
 
         // Create a query that matches the document with the given _id value
         Document query = new Document("_id", new ObjectId(id));
 
         // Create an update that sets the value of a field to the new value
-        Document update = new Document("$set", new BasicDBObject("name", newName)
-                .append("age", newAge)
-                .append("address", newAddress)
-                .append("zipcode", newZipcode)
-                .append("city", newCity));
-
+        Document update = new Document("$set", new BasicDBObject("name", person.getName())
+                .append("age", person.age)
+                .append("address", person.getAddress())
+                .append("zipcode", person.getZipcode())
+                .append("city", person.getCity()));
+                // Customer or Employee number will never change
         // Call the updateOne method with the query and update objects
         UpdateResult result = collection.updateOne(query, update);
 
@@ -127,18 +127,20 @@ public class DbFacade {
 
     private ArrayList<Person> getPeople(FindIterable<Document> collection) {
 
-        MongoCursor<Document> cursor = collection.iterator();
+        ArrayList<Person> people;
+        try (MongoCursor<Document> cursor = collection.iterator()) {
 
-        ArrayList<Person> people = new ArrayList<>();
+            people = new ArrayList<>();
 
-        while (cursor.hasNext()) {
-            Document document = cursor.next();
-            if (document.containsKey("customerNo")) {
-                people.add(Customer.fromDoc(document));
-            } else if (document.containsKey("employeeNo")) {
-                people.add(Employee.fromDoc(document));
-            } else {
-                people.add(Person.fromDoc(document));
+            while (cursor.hasNext()) {
+                Document document = cursor.next();
+                if (document.containsKey("customerNo")) {
+                    people.add(Customer.fromDoc(document));
+                } else if (document.containsKey("employeeNo")) {
+                    people.add(Employee.fromDoc(document));
+                } else {
+                    people.add(Person.fromDoc(document));
+                }
             }
         }
         return people;
