@@ -20,8 +20,8 @@ public class DbFacade {
     MongoClient mongoClient;
     private MongoDatabase db;
     private MongoCollection<Document> collection;
-    private String connString;
-    private String dbName;
+    private final String connString;
+    private final String dbName;
 
     public DbFacade(String address, String dbName, String collectionName) {
         this.connString = address;
@@ -127,18 +127,20 @@ public class DbFacade {
 
     private ArrayList<Person> getPeople(FindIterable<Document> collection) {
 
-        MongoCursor<Document> cursor = collection.iterator();
+        ArrayList<Person> people;
+        try (MongoCursor<Document> cursor = collection.iterator()) {
 
-        ArrayList<Person> people = new ArrayList<>();
+            people = new ArrayList<>();
 
-        while (cursor.hasNext()) {
-            Document document = cursor.next();
-            if (document.containsKey("customerNo")) {
-                people.add(Customer.fromDoc(document));
-            } else if (document.containsKey("employeeNo")) {
-                people.add(Employee.fromDoc(document));
-            } else {
-                people.add(Person.fromDoc(document));
+            while (cursor.hasNext()) {
+                Document document = cursor.next();
+                if (document.containsKey("customerNo")) {
+                    people.add(Customer.fromDoc(document));
+                } else if (document.containsKey("employeeNo")) {
+                    people.add(Employee.fromDoc(document));
+                } else {
+                    people.add(Person.fromDoc(document));
+                }
             }
         }
         return people;
