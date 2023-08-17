@@ -1,5 +1,6 @@
 # MongoDB-Facade-Crud
-Inlämningsuppgift Jin23DA
+Inlämningsuppgift Jin23DA för hantera MongoDB
+
 
 # När du ska kontrollera inlämningen säg till så tillåter jag alla ip adresser att ansluta molndatabasen 
 ## Uppgiften
